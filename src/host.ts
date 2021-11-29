@@ -94,6 +94,7 @@ export class ChattyHost {
   private _defaultTimeout: number
   private _sequence = 0
   private _receivers: {[key: number]: Receiver} = {}
+  private _enableEventSrcValidation : boolean = true
 
   /**
    * @param builder The client builder that is responsible for constructing this object.
@@ -120,6 +121,7 @@ export class ChattyHost {
     this._port = null
     this._targetOrigin = builder.targetOrigin
     this._defaultTimeout = builder.defaultTimeout
+    this._enableEventSrcValidation = builder.enableEventSrcValidation
   }
 
   /**
@@ -282,7 +284,7 @@ export class ChattyHost {
   // https://www.html5rocks.com/en/tutorials/security/sandboxed-iframes/#safely-sandboxing-eval
   // If sandboxing is not enabled targetOrigin can be set and validated
   private isValidMsg (evt: MessageEvent) {
-    if (evt.source !== this.iframe.contentWindow) return false
+    if (this._enableEventSrcValidation && evt.source !== this.iframe.contentWindow) return false
     if (this._targetOrigin && !(this._targetOrigin === '*' || this._targetOrigin === evt.origin)) return false
     return true
   }

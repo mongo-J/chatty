@@ -37,6 +37,7 @@ export class ChattyHostBuilder {
   private _frameBorder: string = '0'
   private _targetOrigin: string | null = null
   private _defaultTimeout = 30000
+  private _enableEventSrcValidation: boolean = true
 
   /** @hidden */
   constructor (private _url?: string, private _source?: string) {}
@@ -71,6 +72,10 @@ export class ChattyHostBuilder {
 
   get defaultTimeout () {
     return this._defaultTimeout
+  }
+
+  get enableEventSrcValidation() {
+    return this._enableEventSrcValidation
   }
 
   /**
@@ -180,6 +185,15 @@ export class ChattyHostBuilder {
 
   withTargetOrigin (targetOrigin: string) {
     this._targetOrigin = targetOrigin
+    return this
+  }
+
+  /**
+   * Disable event source validation so that the postMessage event source is not checked against the host's iframe's contentWindow
+   * @returns the host builder
+   */
+  disableEventSrcValidation () {
+    this._enableEventSrcValidation = false
     return this
   }
 
